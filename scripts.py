@@ -1,5 +1,6 @@
 import os
 import urllib.request
+import time
 
 url = []
 name = []
@@ -16,9 +17,32 @@ def newurl():
     inputname = input("Enter a name for this URL: ")
     url.append(inputurl)
     name.append(inputname)
+    print(url[0])
+    print(name[0])
+
+
+def get_contents():
+    for i in range(len(url)):
+        print("Loading...")
+        current_cont.append(urllib.request.urlopen(url[i]).read())
+        status.append("x")
+
+
+def compare_contents():
+    # Get new contents
+    for i in range(len(url)):
+        new_cont.append(urllib.request.urlopen(url[i]).read())
+
+    # Compare them and return status
+    for i in range(len(url)):
+        if current_cont[i] == new_cont[i]:
+            status[i] = "\t\tNo change!"
+        else:
+            status[i] = "\t\tChanged!"
 
 
 def track():
+    # TODO make output better
     os.system('cls')
     if len(url) == "0":
         print("There is no URL to track! Go back and add more.")
@@ -26,29 +50,17 @@ def track():
     get_contents()  # Get current contents of URLs
     cont = True
     while cont:
+        os.system('cls')
         print("Now tracking the URLs. They will be checked every 5 seconds.\n")
         for i in range(len(url)):
+            if status[i] == "\t\tChanged!":
+                print(str(i + 1) + ". " + name[i] + status[i])
+            else:
+                continue
+        for i in range(len(url)):
             compare_contents()
-            print(str(i + 1) + ". " + name[i] + status[i])
-
-
-def get_contents():
-    for i in range(len(url)):
-        print(url)
-        print(name)
-        print(i)
-        current_cont[i] = urllib.request.urlopen(url[i]).read()
-
-
-def compare_contents():
-    # Get new contents
-    for i in range(len(url)):
-        # TODO Fix the damn IndexError list assignment index out of range
-        new_cont[i] = urllib.request.urlopen(url[i]).read()
-
-    # Compare them and return status
-    for i in range(len(url)):
-        if current_cont[i] == new_cont[i]:
-            status[i] = "No change!"
-        else:
-            status[i] = "Changed!"
+            if status[i] == "\t\tNo change!":
+                print(str(i + 1) + ". " + name[i] + status[i])
+            else:
+                continue
+            time.sleep(5)
